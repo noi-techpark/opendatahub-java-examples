@@ -1,12 +1,5 @@
 package com.opendatahub.examples.java.api;
 
-import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
-import java.net.http.HttpResponse.BodyHandlers;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class MobilityClient extends SimpleHttpClient {
 
@@ -31,6 +24,6 @@ public class MobilityClient extends SimpleHttpClient {
     }
 
     public String getData(String stationType, String dataType) throws Exception {
-        return httpClient.get(BASE_URL + stationType + "/" + dataType + "/");
+        return httpClient.get(BASE_URL + stationType + "/" + dataType + "/latest");
     }
 }

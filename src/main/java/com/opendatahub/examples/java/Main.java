@@ -1,29 +1,21 @@
 package com.opendatahub.examples.java;
 
-import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
-import java.net.http.HttpResponse.BodyHandlers;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.JsonNode;
-
 import com.opendatahub.examples.java.api.MobilityClient;
 import com.opendatahub.examples.java.api.TourismClient;
 
 import java.util.logging.Logger;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 public class Main {
 
     public static void main(String[] args) throws Exception {
 
         Logger logger = Logger.getLogger(Main.class.getName());
-        ObjectMapper mapper = new ObjectMapper();
 
         TourismClient tourismClient = new TourismClient();
         MobilityClient mobilityClient = new MobilityClient();
-
 
         /********************************************************
          * MOBILITY API - https://mobility.api.opendatahub.com
@@ -54,7 +46,13 @@ public class Main {
         String specificData = mobilityClient.getData("CarsharingCar", "availability");
         logger.info(specificData);
 
-
+        // Convert String from previous call to a JSONObject
+        // then extract mvalue, representing the availability of the CarsharingCar
+        JSONObject json = new JSONObject(specificData);
+        JSONArray data = json.getJSONArray("data");
+        JSONObject firstDataSet = data.getJSONObject(0);
+        double mvalue = firstDataSet.getDouble("mvalue");
+        logger.info("value is : " + mvalue);
 
         /********************************************************
          * TOURISM API - https://tourism.api.opendatahub.com
@@ -65,8 +63,8 @@ public class Main {
         String accommodations = tourismClient.getData("Accommodation");
         logger.info(accommodations);
 
-        // get specific Entity like Article
-        // https://tourism.api.opendatahub.com/v1/Article
+        // // get specific Entity like Article
+        // // https://tourism.api.opendatahub.com/v1/Article
         String articles = tourismClient.getData("Article");
         logger.info(articles);
 
